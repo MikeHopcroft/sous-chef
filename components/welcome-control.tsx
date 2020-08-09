@@ -1,8 +1,11 @@
 import React from "react";
+import ReactMarkdown from 'react-markdown';
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 
 import { ApplicationState, AnyAction } from "../actions";
+
+const markdown = require('./welcome.md').default.toString();
 
 // import styles from './controls.module.css';
 
@@ -12,7 +15,8 @@ interface Props {
 
 class WelcomeControl extends React.Component<Props> {
   render() {
-    return <div>Welcome. Please accept EULA to continue.</div>
+    // return <div>Welcome. Please accept EULA to continue.</div>
+    return <ReactMarkdown source={markdown}/>
   }
 }
 

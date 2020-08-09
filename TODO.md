@@ -17,7 +17,7 @@
   * Evaluation
   * Thank you
 * Components and functionality
-  * Markdown rendering
+  * x Markdown rendering
   * Recognizers
   * Chrome detect
   * Menu load
