@@ -1,6 +1,7 @@
 # TODO List
 
-* Enable typescript
+* x Enable typescript
+* x Remove next.js sample app
 * Enable gts
 * Sketch pages and components for top-level workflow
   * Welcome
