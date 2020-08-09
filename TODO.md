@@ -3,10 +3,15 @@
 * x Enable typescript
 * x Remove next.js sample app
 * Enable gts
+* x Integrate redux
+* Integrate sagas
 * Sketch pages and components for top-level workflow
+  * Loading
   * Welcome
     * Accept terms
     * Continue
+  * Instructions
+    * Practice
   * Initial order entry
   * Order fixup
   * Evaluation
