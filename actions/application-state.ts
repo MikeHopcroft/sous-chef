@@ -54,7 +54,7 @@ export interface ApplicationState {
 
 export function initialState(): ApplicationState {
   return {
-    state: SessionState.LOADING,
+    state: SessionState.WELCOME,
     orders: [],
   }
 }
