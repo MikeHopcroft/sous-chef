@@ -1,2 +1,1 @@
-# sous-chef
-An application for crowd-sourcing speech orders for restaurants
+This is a starter template for [Learn Next.js](https://nextjs.org/learn).
