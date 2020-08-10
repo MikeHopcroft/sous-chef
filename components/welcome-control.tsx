@@ -1,10 +1,16 @@
 import React from "react";
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import ReactMarkdown from 'react-markdown';
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 
-import { ApplicationState, AnyAction } from "../actions";
+import {
+  ApplicationState,
+  AnyAction,
+  SessionState,
+  updateProperties
+} from "../actions";
 
 const markdown = require('./welcome.md').default.toString();
 
@@ -12,23 +18,56 @@ const markdown = require('./welcome.md').default.toString();
 
 interface Props {
   application: ApplicationState;
+  dispatchAnyAction(action: AnyAction);
 };
 
+interface State {
+  termsAccepted: boolean;
+}
+
 class WelcomeControl extends React.Component<Props> {
+  constructor(props) {
+    super(props);
+    this.state = { termsAccepted: false };
+    this.onAccepted = this.onAccepted.bind(this);
+    this.onContinue = this.onContinue.bind(this);
+  }
+
+  onAccepted(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ termsAccepted: e.target.checked })
+  }
+
+  onContinue() {
+    const action = updateProperties({
+      state: SessionState.INSTRUCTIONS,
+      termsAccepted: true
+    });
+    this.props.dispatchAnyAction(action);
+  }
+
   render() {
-    // return <div>Welcome. Please accept EULA to continue.</div>
     return (
       <div>
-        <ReactMarkdown source={markdown}/>
+        <Form>
+          <Form.Group>
+            <Form.Label>
+              <ReactMarkdown source={markdown}/>
+            </Form.Label>
+            <Form.Check
+              name='accepted'
+              type='checkbox'
+              label='I accept these terms.'
+              onChange={this.onAccepted}
+              style={{paddingLeft: '2em'}}
+            />
+          </Form.Group>
+        </Form>
         <Button
             className="btn btn-success btn-sm"
-            // disabled={
-            //   !this.props.application.speechConfig.speechSupport ||
-            //   this.props.application.isRecording
-            // }
-            // onClick={this.startRecognition}
+            disabled={ !this.state.termsAccepted }
+            onClick={ this.onContinue }
           >
-            I accept these terms
+            Continue
         </Button>
       </div>
     )
@@ -41,7 +80,10 @@ function mapStateToProps(application: ApplicationState) {
 
 function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
-  };
+    dispatchAnyAction(action: AnyAction) {
+      dispatch(action);
+    }
+  }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(WelcomeControl);

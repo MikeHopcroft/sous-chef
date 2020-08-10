@@ -20,10 +20,10 @@
   * x Markdown rendering
   * Recognizers
   * Chrome detect
-  * Menu load
+  * . Menu load
   * Random cart generation
   * Processor
-  * Cart render
+  * . Cart render
   * Cart diffing
 * Video instructions
 * 

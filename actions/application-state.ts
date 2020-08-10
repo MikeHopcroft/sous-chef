@@ -1,9 +1,21 @@
-export const ordersPerSession = 3;
-export const attemptsPerOrder = 3;
+import { Cart, World } from 'prix-fixe';
+import { LexiconSpec, ShortOrderWorld } from 'short-order';
+import { InvertedIndex } from 'token-flow';
 
-interface Cart {
-  items: string[];
-}
+export const ordersPerSession = 5;
+export const roundsPerOrder = 3;
+
+export interface BluePlateWorld {
+  prixFixeWorld: World;
+  lexiconSpec: LexiconSpec;
+  postings: InvertedIndex;
+  shortOrderWorld: ShortOrderWorld;
+  // testResults: AllTestResults;
+};
+
+// interface Cart {
+//   items: string[];
+// }
 
 export enum SessionState {
   LOADING,
@@ -14,32 +26,34 @@ export enum SessionState {
   THANKYOU
 }
 
-export enum OrderState {
-  INITIAL_ATTEMPT,
-  REPAIR_ATTEMPT,
-  FEEDBACK,
-  COMPLETE
-}
+// export enum OrderState {
+//   INITIAL_ATTEMPT,
+//   REPAIR_ATTEMPT,
+//   FEEDBACK,
+//   COMPLETE
+// }
 
-export enum AttemptState {
-  BEFORE_RECORD,
-  BEFORE_TRANSCRIPTION,
-  COMPLETE
-}
+// export enum RoundState {
+//   BEFORE_RECORD,
+//   BEFORE_TRANSCRIPTION,
+//   COMPLETE
+// }
 
-export interface Attempt {
+export interface Round {
   initialCart: Cart;
   transcription?: string;
   resultCart?: Cart;
-  satisfied?: boolean;
+  resultCartOk?: boolean;
+  userTextOk?: boolean;
+  userCartOk?: boolean;
   notes?: string;
 }
 
 export interface Order {
-  state: OrderState,
+  // state: OrderState,
   isPractice: boolean;
-  expected: Cart;
-  attempts: Attempt[];
+  expectedCart: Cart;
+  rounds: Round[];
 }
 
 export interface ApplicationState {
@@ -47,14 +61,33 @@ export interface ApplicationState {
   termsAccepted?: boolean;
   instructionsRead?: boolean;
   currentOrder?: Order;
-  currentAttemp?: Attempt;
+  currentRound?: Round;
   orders: Order[];
   notes?: string;
+  bluePlateWorld?: BluePlateWorld;
 }
 
 export function initialState(): ApplicationState {
   return {
     state: SessionState.WELCOME,
+    currentOrder: {
+      // state: OrderState.INITIAL_ATTEMPT,
+      isPractice: false,
+      expectedCart: {
+        items: [
+          {
+            uid: 0,
+            quantity: 1,
+            key: '302:1:2',
+            children: []
+          }
+        ]
+      },
+      rounds: []
+    },
+    currentRound: {
+      initialCart: { items: [] }
+    },
     orders: [],
   }
 }

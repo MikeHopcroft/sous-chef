@@ -1,11 +1,17 @@
+import { Cart } from 'prix-fixe';
+
 import {
-  ApplicationState
+  ApplicationState,
+  BluePlateWorld
 } from "./application-state";
 
 export enum ActionType {
   ACCEPT_TERMS = 'ACCEPT_TERMS',
   COMPLETE_ROUND = 'COMPLETE_ROUND',
   COMPLETE_SESSION = 'COMPLETE_SESSION',
+  LOAD_WORLD = 'LOAD_WORLD',
+  SET_CART = 'SET_CART',
+  SET_WORLD = 'SET_WORLD',
   TRANSCRIPT_READY = 'TRANSCRIPT_READY',
   UPDATE_PROPERTIES = 'UPDATE_PROPERTIES',
 };
@@ -26,17 +32,20 @@ export function acceptTerms(
 
 export interface CompleteRoundAction {
   type: ActionType.COMPLETE_ROUND;
-  satistifed: boolean;
+  transcriptionOk: boolean;
+  cartOk: boolean;
   notes: string;
 };
 
 export function completeRound(
-  satistifed: boolean,
+  transcriptionOk: boolean,
+  cartOk: boolean,
   notes: string
 ): CompleteRoundAction {
   return { 
     type: ActionType.COMPLETE_ROUND,
-    satistifed,
+    transcriptionOk,
+    cartOk,
     notes
   };
 }
@@ -55,11 +64,44 @@ export function completeSession(
   };
 }
 
+export interface LoadWorldAction {
+  type: ActionType.LOAD_WORLD;
+  language: string;
+};
+
+export function loadWorld(language: string): LoadWorldAction {
+  return { type: ActionType.LOAD_WORLD, language };
+}
+
+export interface SetCartAction {
+  type: ActionType.SET_CART;
+  cart: Cart;
+};
+
+export function setCart(cart: Cart): SetCartAction {
+  return { type: ActionType.SET_CART, cart };
+}
+
 export interface TranscriptReadyAction {
   type: ActionType.TRANSCRIPT_READY;
   transcription: string;
   final: boolean;
 };
+
+export interface SetWorldAction {
+  type: ActionType.SET_WORLD;
+  bluePlateWorld: BluePlateWorld;
+};
+
+export function setWorld(
+  bluePlateWorld: BluePlateWorld
+): SetWorldAction {
+  console.log('setWorld');
+  return {
+    type: ActionType.SET_WORLD,
+    bluePlateWorld,
+  };
+}
 
 export function transcriptionReady(
   transcription: string,
@@ -90,5 +132,8 @@ export type AnyAction =
   AcceptTermsAction |
   CompleteRoundAction | 
   CompleteSessionAction |
+  LoadWorldAction |
+  SetCartAction |
+  SetWorldAction |
   TranscriptReadyAction |
   UpdatePropertiesAction;

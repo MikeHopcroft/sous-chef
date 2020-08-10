@@ -1,26 +1,27 @@
 import React from 'react';
 import { Provider } from 'react-redux'
 import { applyMiddleware, createStore } from 'redux'
-// import createSagaMiddleware from 'redux-saga'
-// import { takeLatest } from 'redux-saga/effects';
+import createSagaMiddleware from 'redux-saga'
+import { takeLatest } from 'redux-saga/effects';
 
 import {
   ActionType,
   initialState,
+  loadWorld,
+  loadWorldSaga,
+  transcriptionReadySaga
 } from '../actions';
 
 import { ApplicationStateReducer } from '../actions/reducers'
 import FrameControl from '../components/frame-control';
 
-// const sagaMiddleware = createSagaMiddleware()
+const sagaMiddleware = createSagaMiddleware()
 
 const initial = initialState();
 const store = createStore(
   ApplicationStateReducer,
-  initial);
-//   ,
-//   applyMiddleware(sagaMiddleware)
-// );
+  applyMiddleware(sagaMiddleware)
+);
 
 // // https://stackoverflow.com/questions/35305661/where-to-write-to-localstorage-in-a-redux-app
 // let speechConfig = initial.speechConfig;
@@ -32,14 +33,14 @@ const store = createStore(
 //   }
 // });
 
-// sagaMiddleware.run(initSagas)
-// store.dispatch(loadWorld('en-US'));
+sagaMiddleware.run(initSagas)
+store.dispatch(loadWorld('en-US'));
 
-// function* initSagas() {
-//   // console.log('initSagas()');
-//   yield takeLatest(ActionType.LOAD_WORLD, loadWorldSaga);
-//   yield takeLatest(ActionType.PROCESS, processSaga);
-// }
+function* initSagas() {
+  // console.log('initSagas()');
+  yield takeLatest(ActionType.LOAD_WORLD, loadWorldSaga);
+  yield takeLatest(ActionType.TRANSCRIPT_READY, transcriptionReadySaga);
+}
 
 export default function Home() {
   return (
